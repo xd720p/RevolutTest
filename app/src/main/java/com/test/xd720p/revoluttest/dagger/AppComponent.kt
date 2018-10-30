@@ -2,7 +2,7 @@ package com.test.xd720p.revoluttest.dagger
 
 
 import com.test.xd720p.revoluttest.CurrencyApplication
-import com.test.xd720p.revoluttest.ui.CurrencyActivity
+import com.test.xd720p.revoluttest.viewmodels.CurrencyViewModel
 import dagger.Component
 
 import javax.inject.Singleton
@@ -12,5 +12,5 @@ import javax.inject.Singleton
 interface AppComponent {
     fun inject(currencyApplication: CurrencyApplication)
 
-    fun inject(currencyActivity: CurrencyActivity)
+    fun inject(currencyViewModel: CurrencyViewModel)
 }

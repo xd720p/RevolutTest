@@ -1,33 +1,28 @@
 package com.test.xd720p.revoluttest.ui
 
+import android.arch.lifecycle.AndroidViewModel
+import android.arch.lifecycle.LiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import com.test.xd720p.revoluttest.CurrencyApplication
 import com.test.xd720p.revoluttest.R
-import com.test.xd720p.revoluttest.dagger.AppComponent
-import com.test.xd720p.revoluttest.networking.ApiService
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.CoroutineScope
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.launch
-import javax.inject.Inject
+import com.test.xd720p.revoluttest.data.CurrencyRate
+import com.test.xd720p.revoluttest.viewmodels.CurrencyViewModel
+import kotlinx.android.synthetic.main.activity_currency.*
 
 class CurrencyActivity : BaseActivity() {
 
-    @Inject
-    lateinit var apiService: ApiService
+    private lateinit var viewModel: AndroidViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency)
-        CurrencyApplication.appComponent.inject(this)
-        CoroutineScope(Dispatchers.Main).launch {
-            getCurrencies()
-        }
-    }
 
-    private suspend fun getCurrencies() {
-        val getCurrencies = apiService.getCurrencies("EUR")
-        val currencies = getCurrencies.await()
-        println("base currenncy is ${currencies.baseCurrency}")
+        viewModel = ViewModelProviders.of(this).get(CurrencyViewModel::class.java)
+        val currenciesLiveData: LiveData<CurrencyRate> = (viewModel as CurrencyViewModel).geCurrenciesObservalbe()
+
+        currenciesLiveData.observe(this, Observer {currencyRateVo ->
+            currencyView.text = currencyRateVo?.baseCurrency
+        })
     }
 }
