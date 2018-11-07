@@ -22,6 +22,10 @@ class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = Ar
 
     override fun getItemCount(): Int = currencyList.size
 
+    fun getData(): MutableList<CurrencyRateVO> {
+        return currencyList
+    }
+
     //    FIXME maybe this shouldn't be in adapter, it should be in view model
     fun getMainCurrencyIso(): String {
         return if (currencyList.isNotEmpty()) {
@@ -30,10 +34,9 @@ class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = Ar
     }
 
     //fixme use diff utils
-    fun updateCurrencyList(newCurrencyList: List<CurrencyRateVO>) {
+    fun setCurrencyList(newCurrencyList: List<CurrencyRateVO>) {
         currencyList.clear()
         currencyList.addAll(newCurrencyList)
-        notifyDataSetChanged()
     }
 
     inner class CurrencyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

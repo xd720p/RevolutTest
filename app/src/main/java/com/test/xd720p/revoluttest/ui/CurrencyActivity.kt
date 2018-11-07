@@ -1,14 +1,16 @@
 package com.test.xd720p.revoluttest.ui
 
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
+import android.support.v7.util.DiffUtil
+import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
 import com.test.xd720p.revoluttest.R
 import com.test.xd720p.revoluttest.data.CurrencyRateVO
+import com.test.xd720p.revoluttest.utils.diffutils.CurrencyDiffUtilCallback
 import com.test.xd720p.revoluttest.viewmodels.CurrencyViewModel
 import kotlinx.android.synthetic.main.activity_currency.*
 
@@ -40,6 +42,7 @@ class CurrencyActivity : BaseActivity() {
     private fun initCurrencyRecyclerView() {
         currencyAdapter = CurrencyAdapter()
         currencyRecyclerView.layoutManager = LinearLayoutManager(this)
+        (currencyRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         currencyRecyclerView.adapter = currencyAdapter
     }
 
@@ -52,7 +55,12 @@ class CurrencyActivity : BaseActivity() {
     }
 
     private fun updateAdapter(currencyRateVOList: List<CurrencyRateVO>) {
-        currencyAdapter.updateCurrencyList(currencyRateVOList)
+        val currenciesDiffUtilCallback = CurrencyDiffUtilCallback(currencyAdapter.getData(), currencyRateVOList)
+        val currenciesDiffResult = DiffUtil.calculateDiff(currenciesDiffUtilCallback)
+
+
+        currencyAdapter.setCurrencyList(currencyRateVOList)
+        currenciesDiffResult.dispatchUpdatesTo(currencyAdapter)
     }
 
     override fun onStop() {
