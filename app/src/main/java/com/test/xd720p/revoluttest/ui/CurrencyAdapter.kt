@@ -9,7 +9,7 @@ import com.test.xd720p.revoluttest.R
 import com.test.xd720p.revoluttest.data.CurrencyRateVO
 import kotlinx.android.synthetic.main.currency_item.view.*
 
-class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO>) :
+class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = ArrayList()) :
     RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
@@ -21,6 +21,20 @@ class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO>) :
     }
 
     override fun getItemCount(): Int = currencyList.size
+
+    //    FIXME maybe this shouldn't be in adapter, it should be in view model
+    fun getMainCurrencyIso(): String {
+        return if (currencyList.isNotEmpty()) {
+            currencyList.first().iso
+        } else "EUR"
+    }
+
+    //fixme use diff utils
+    fun updateCurrencyList(newCurrencyList: List<CurrencyRateVO>) {
+        currencyList.clear()
+        currencyList.addAll(newCurrencyList)
+        notifyDataSetChanged()
+    }
 
     inner class CurrencyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

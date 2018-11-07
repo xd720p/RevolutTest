@@ -25,15 +25,21 @@ class CurrencyViewModel constructor(application: Application) : AndroidViewModel
     }
 
     fun getCurrenciesObservalbe() : LiveData<MutableList<CurrencyRateVO>> {
-        CoroutineScope(Dispatchers.Main).launch {
-            updateCurrenciesVO(currencyRepository.loadCurrencies("EUR"))
-        }
-
         return currenciesVOLiveData
+    }
+
+    fun updateCurrencies(currencyIso: String) {
+        CoroutineScope(Dispatchers.Main).launch {
+            updateCurrenciesVO(currencyRepository.loadCurrencies(currencyIso))
+        }
     }
 
     fun updateCurrenciesVO(currencyRate: CurrencyRate?) {
         val currencyRateVOList: MutableList<CurrencyRateVO> = ArrayList()
+        currencyRate?.baseCurrency?.let {
+//            FIXME real rate pls
+            currencyRateVOList.add(CurrencyRateVO(it, it, 1f))
+        }
         currencyRate?.currencyRates?.forEach {
             currencyRateVOList.add(CurrencyRateVO(it.key, it.key, it.value))
         }

@@ -17,7 +17,9 @@
 
         <activity android:name=".ui.BaseActivity"/>
 
-        <activity android:name=".ui.CurrencyActivity">
+        <activity android:name=".ui.CurrencyActivity"
+                  android:configChanges="orientation"
+                  android:windowSoftInputMode="stateUnchanged|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
