@@ -21,7 +21,7 @@ class CurrencyActivity : BaseActivity() {
     private val handler = Handler()
     private val runnable = object : Runnable {
         override fun run() {
-            viewModel.updateCurrencies(currencyAdapter.getMainCurrencyIso())
+            viewModel.updateCurrencies(currencyAdapter.getMainCurrencyVO())
             handler.postDelayed(this, 1000)
         }
     }
@@ -47,7 +47,7 @@ class CurrencyActivity : BaseActivity() {
     }
 
     private fun subScribeOnCurrencyUpdated() {
-        val currenciesLiveData: LiveData<MutableList<CurrencyRateVO>> = viewModel.getCurrenciesObservalbe()
+        val currenciesLiveData: LiveData<List<CurrencyRateVO>> = viewModel.getCurrenciesObservable()
         currenciesLiveData.observe(this, Observer {currencyRateVoList ->
             currencyRateVoList?.let { updateAdapter(it) }
         })

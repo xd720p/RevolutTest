@@ -27,13 +27,12 @@ class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = Ar
     }
 
     //    FIXME maybe this shouldn't be in adapter, it should be in view model
-    fun getMainCurrencyIso(): String {
+    fun getMainCurrencyVO(): CurrencyRateVO {
         return if (currencyList.isNotEmpty()) {
-            currencyList.first().iso
-        } else "EUR"
+            currencyList.first()
+        } else CurrencyRateVO("EUR", "EUR", 10f)
     }
 
-    //fixme use diff utils
     fun setCurrencyList(newCurrencyList: List<CurrencyRateVO>) {
         currencyList.clear()
         currencyList.addAll(newCurrencyList)
