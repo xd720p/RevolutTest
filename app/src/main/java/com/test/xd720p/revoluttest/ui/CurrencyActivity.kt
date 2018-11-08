@@ -26,6 +26,16 @@ class CurrencyActivity : BaseActivity() {
         }
     }
 
+    private val recyclerViewItemChanged: (CurrencyRateVO, Int) -> Unit = { currencyRateVO, itemPosition ->
+//        onBaseCurrencyChanged()
+//        currencyRecyclerView.smoothScrollToPosition(0)
+    }
+
+    private fun onBaseCurrencyChanged() {
+//        handler.removeCallbacksAndMessages(runnable)
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_currency)
@@ -34,16 +44,16 @@ class CurrencyActivity : BaseActivity() {
         initCurrencyRecyclerView()
     }
 
-    override fun onStart() {
-        super.onStart()
-        subScribeOnCurrencyUpdated()
-    }
-
     private fun initCurrencyRecyclerView() {
-        currencyAdapter = CurrencyAdapter()
+        currencyAdapter = CurrencyAdapter(recyclerViewItemChanged)
         currencyRecyclerView.layoutManager = LinearLayoutManager(this)
         (currencyRecyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
         currencyRecyclerView.adapter = currencyAdapter
+    }
+
+    override fun onStart() {
+        super.onStart()
+        subScribeOnCurrencyUpdated()
     }
 
     private fun subScribeOnCurrencyUpdated() {
@@ -57,7 +67,6 @@ class CurrencyActivity : BaseActivity() {
     private fun updateAdapter(currencyRateVOList: List<CurrencyRateVO>) {
         val currenciesDiffUtilCallback = CurrencyDiffUtilCallback(currencyAdapter.getData(), currencyRateVOList)
         val currenciesDiffResult = DiffUtil.calculateDiff(currenciesDiffUtilCallback)
-
 
         currencyAdapter.setCurrencyList(currencyRateVOList)
         currenciesDiffResult.dispatchUpdatesTo(currencyAdapter)

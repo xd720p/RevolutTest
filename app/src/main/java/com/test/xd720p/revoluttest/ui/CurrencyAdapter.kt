@@ -1,6 +1,8 @@
 package com.test.xd720p.revoluttest.ui
 
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +10,9 @@ import android.widget.TextView
 import com.test.xd720p.revoluttest.R
 import com.test.xd720p.revoluttest.data.CurrencyRateVO
 import kotlinx.android.synthetic.main.currency_item.view.*
+import java.util.*
 
-class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = ArrayList()) :
+class CurrencyAdapter(private val onItemChanged: (CurrencyRateVO, Int) -> Unit, private val currencyList: MutableList<CurrencyRateVO> = ArrayList()) :
     RecyclerView.Adapter<CurrencyAdapter.CurrencyViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
@@ -30,12 +33,23 @@ class CurrencyAdapter(private val currencyList: MutableList<CurrencyRateVO> = Ar
     fun getMainCurrencyVO(): CurrencyRateVO {
         return if (currencyList.isNotEmpty()) {
             currencyList.first()
-        } else CurrencyRateVO("EUR", "EUR", 10f)
+        } else CurrencyRateVO("EUR", "EUR", 1f)
     }
 
     fun setCurrencyList(newCurrencyList: List<CurrencyRateVO>) {
         currencyList.clear()
         currencyList.addAll(newCurrencyList)
+    }
+
+    private fun moveItemToTop(itemPosition: Int) {
+        Collections.swap(currencyList, itemPosition, 0)
+        notifyItemMoved(itemPosition, 0)
+
+        onItemChanged(currencyList.first(), 0)
+    }
+
+    private fun changeItemMoneyValue(currencyRateVO: CurrencyRateVO) {
+        onItemChanged(currencyRateVO, 0)
     }
 
     inner class CurrencyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

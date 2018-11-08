@@ -5,6 +5,10 @@ import com.test.xd720p.revoluttest.repository.CurrencyRepository
 
 class CurrencyCalculationUseCase(private val currencyRepository: CurrencyRepository) {
 
+//    fun getCalculatedRatesOffline(baseCurrencyVO: CurrencyRateVO): List<CurrencyRateVO> {
+//
+//    }
+
     suspend fun getCalculatedRates(baseCurrencyVO: CurrencyRateVO): List<CurrencyRateVO> {
         val currencyRateVOList: MutableList<CurrencyRateVO> = ArrayList()
         val loadedCurrencyRate = currencyRepository.loadCurrencies(baseCurrencyVO.iso)
