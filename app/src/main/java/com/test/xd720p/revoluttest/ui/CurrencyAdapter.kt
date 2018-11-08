@@ -21,6 +21,7 @@ class CurrencyAdapter(private val onItemChanged: (CurrencyRateVO, Int) -> Unit, 
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
         holder.setData(currencyList[position])
+        holder.setMoneyValueIsEnabled(position == 0)
     }
 
     override fun getItemCount(): Int = currencyList.size
@@ -58,6 +59,11 @@ class CurrencyAdapter(private val onItemChanged: (CurrencyRateVO, Int) -> Unit, 
             itemView.currencyISO.text = currencyRateVO.iso
             itemView.currencyName.text = currencyRateVO.name
             itemView.moneyValue.setText(currencyRateVO.value.toString(), TextView.BufferType.EDITABLE)
+        }
+
+        fun setMoneyValueIsEnabled(isEnabled: Boolean) {
+            itemView.moneyValue.isClickable = isEnabled
+            itemView.moneyValue.isFocusable = isEnabled
         }
 
     }
